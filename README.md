@@ -1,6 +1,6 @@
 # Update Jan 16, 2026
 
-### A more recent implementation of LD score regression in python 3 can be found at https://github.com/CBIIT/ldsc. See also the accompanying [web browser](https://ldlink.nih.gov/ldscore) and [preprint](https://doi.org/10.64898/2025.12.19.695639).
+### LDSC now runs on Python 3 (3.11 and above). A more recent implementation with additional features can be found at https://github.com/CBIIT/ldsc. See also the accompanying [web browser](https://ldlink.nih.gov/ldscore) and [preprint](https://doi.org/10.64898/2025.12.19.695639).
 
 # LDSC (LD SCore) `v1.0.1`
 

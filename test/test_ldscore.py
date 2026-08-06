@@ -2,29 +2,30 @@ import ldscore.ldscore as ld
 import unittest
 import bitarray as ba
 import numpy as np
-import nose
+import pytest
 import ldscore.parse as ps
 
 
-def test_getBlockLefts():
-    l = [
-        (np.arange(1, 6), 5, np.zeros(5)),
-        (np.arange(1, 6), 0, np.arange(0, 5)),
-        ((1, 4, 6, 7, 7, 8), 2, (0, 1, 1, 2, 2, 2))
-    ]
-    for coords, max_dist, correct in l:
-        assert np.all(ld.getBlockLefts(coords, max_dist) == correct)
+class Test_block_functions(unittest.TestCase):
 
+    def test_getBlockLefts(self):
+        l = [
+            (np.arange(1, 6), 5, np.zeros(5)),
+            (np.arange(1, 6), 0, np.arange(0, 5)),
+            ((1, 4, 6, 7, 7, 8), 2, (0, 1, 1, 2, 2, 2))
+        ]
+        for coords, max_dist, correct in l:
+            assert np.all(ld.getBlockLefts(coords, max_dist) == correct)
 
-def test_block_left_to_right():
-    l = [
-        ((0, 0, 0, 0, 0), (5, 5, 5, 5, 5)),
-        ((0, 1, 2, 3, 4, 5), (1, 2, 3, 4, 5, 6)),
-        ((0, 0, 2, 2), (2, 2, 4, 4))
-    ]
-    for block_left, correct_answer in l:
-        block_right = ld.block_left_to_right(block_left)
-        assert np.all(block_right == correct_answer)
+    def test_block_left_to_right(self):
+        l = [
+            ((0, 0, 0, 0, 0), (5, 5, 5, 5, 5)),
+            ((0, 1, 2, 3, 4, 5), (1, 2, 3, 4, 5, 6)),
+            ((0, 0, 2, 2), (2, 2, 4, 4))
+        ]
+        for block_left, correct_answer in l:
+            block_right = ld.block_left_to_right(block_left)
+            assert np.all(block_right == correct_answer)
 
 
 class test_bed(unittest.TestCase):
@@ -37,16 +38,16 @@ class test_bed(unittest.TestCase):
     def test_bed(self):
         bed = ld.PlinkBEDFile('test/plink_test/plink.bed', self.N, self.bim)
         # remove three monomorphic SNPs
-        print bed.geno
-        print bed.m
+        print(bed.geno)
+        print(bed.m)
         assert bed.m == 4
         # no individuals removed
-        print bed.n
+        print(bed.n)
         assert self.N == bed.n
         # 5 indivs * 4 polymorphic SNPs
-        print len(bed.geno)
+        print(len(bed.geno))
         assert len(bed.geno) == 64
-        print bed.freq
+        print(bed.freq)
         correct = np.array(
             [0.59999999999999998, 0.59999999999999998, 0.625, 0.625])
         assert np.all(bed.freq == correct)
@@ -77,22 +78,22 @@ class test_bed(unittest.TestCase):
                               keep_snps=keep_snps, keep_indivs=keep_indivs)
         assert bed.m == 1
         assert bed.n == 2
-        print bed.geno
+        print(bed.geno)
         assert bed.geno[0:4] == ba.bitarray('0001')
 
-    @nose.tools.raises(ValueError)
     def test_bad_filename(self):
-        bed = ld.PlinkBEDFile('test/plink_test/plink.bim', 9, self.bim)
+        with pytest.raises(ValueError):
+            bed = ld.PlinkBEDFile('test/plink_test/plink.bim', 9, self.bim)
 
-    @nose.tools.raises(ValueError)
     def test_nextSNPs_errors1(self):
-        bed = ld.PlinkBEDFile('test/plink_test/plink.bed', self.N, self.bim)
-        bed.nextSNPs(0)
+        with pytest.raises(ValueError):
+            bed = ld.PlinkBEDFile('test/plink_test/plink.bed', self.N, self.bim)
+            bed.nextSNPs(0)
 
-    @nose.tools.raises(ValueError)
     def test_nextSNPs_errors2(self):
-        bed = ld.PlinkBEDFile('test/plink_test/plink.bed', self.N, self.bim)
-        bed.nextSNPs(5)
+        with pytest.raises(ValueError):
+            bed = ld.PlinkBEDFile('test/plink_test/plink.bed', self.N, self.bim)
+            bed.nextSNPs(5)
 
     def test_nextSNPs(self):
         for b in [1, 2, 3]:

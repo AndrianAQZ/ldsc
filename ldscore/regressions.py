@@ -7,17 +7,17 @@ Shape convention is (n_snp, n_annot) for all classes.
 Last column = intercept.
 
 '''
-from __future__ import division
+
 import numpy as np
 import pandas as pd
 from scipy.stats import norm, chi2
-import jackknife as jk
-from irwls import IRWLS
+from . import jackknife as jk
+from .irwls import IRWLS
 from scipy.stats import t as tdist
 from collections import namedtuple
 np.seterr(divide='raise', invalid='raise')
 
-s = lambda x: remove_brackets(str(np.matrix(x)))
+s = lambda x: remove_brackets(str(np.asarray(x)))
 
 
 def update_separators(s, ii):
@@ -182,8 +182,7 @@ class LD_Score_Regression(object):
             n1 = np.sum(step1_ii)
             self.twostep_filtered = n_snp - n1
             x1 = x[np.squeeze(step1_ii), :]
-            yp1, w1, N1, initial_w1 = map(
-                lambda a: a[step1_ii].reshape((n1, 1)), (yp, w, N, initial_w))
+            yp1, w1, N1, initial_w1 = [a[step1_ii].reshape((n1, 1)) for a in (yp, w, N, initial_w)]
             update_func1 = lambda a: self._update_func(
                 a, x1, w1, N1, M_tot, Nbar, ii=step1_ii)
             step1_jknife = IRWLS(
@@ -455,7 +454,7 @@ class Hsq(LD_Score_Regression):
         if self.n_annot > 1:
             if ref_ld_colnames is None:
                 ref_ld_colnames = ['CAT_' + str(i)
-                                   for i in xrange(self.n_annot)]
+                                   for i in range(self.n_annot)]
 
             out.append('Categories: ' + ' '.join(ref_ld_colnames))
 
@@ -520,7 +519,7 @@ class Hsq(LD_Score_Regression):
             Regression weights. Approx equal to reciprocal of conditional variance function.
 
         '''
-        M = float(M)
+        M = float(np.squeeze(M))
         if intercept is None:
             intercept = 1
 
@@ -649,7 +648,7 @@ class Gencov(LD_Score_Regression):
             Regression weights. Approx equal to reciprocal of conditional variance function.
 
         '''
-        M = float(M)
+        M = float(np.squeeze(M))
         if intercept_gencov is None:
             intercept_gencov = 0
         if intercept_hsq1 is None:
@@ -705,9 +704,9 @@ class RG(object):
                 np.multiply(hsq1.tot_delete_values, hsq2.tot_delete_values))
             rg = jk.RatioJackknife(
                 rg_ratio, gencov.tot_delete_values, denom_delete_values)
-            self.rg_jknife = float(rg.jknife_est)
-            self.rg_se = float(rg.jknife_se)
-            self.rg_ratio = float(rg_ratio)
+            self.rg_jknife = float(np.squeeze(rg.jknife_est))
+            self.rg_se = float(np.squeeze(rg.jknife_se))
+            self.rg_ratio = float(np.squeeze(rg_ratio))
             self.p, self.z = p_z_norm(self.rg_ratio, self.rg_se)
 
     def summary(self, silly=False):

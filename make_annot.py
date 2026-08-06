@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from __future__ import print_function
+
 import pandas as pd
 import numpy as np
 import argparse
@@ -9,7 +9,7 @@ import gzip
 def gene_set_to_bed(args):
     print('making gene set bed file')
     GeneSet = pd.read_csv(args.gene_set_file, header = None, names = ['GENE'])
-    all_genes = pd.read_csv(args.gene_coord_file, delim_whitespace = True)
+    all_genes = pd.read_csv(args.gene_coord_file, sep=r'\s+')
     df = pd.merge(GeneSet, all_genes, on = 'GENE', how = 'inner')
     df['START'] = np.maximum(1, df['START'] - args.windowsize)
     df['END'] = df['END'] + args.windowsize
@@ -19,7 +19,7 @@ def gene_set_to_bed(args):
 def make_annot_files(args, bed_for_annot):
     print('making annot file')
     df_bim = pd.read_csv(args.bimfile,
-            delim_whitespace=True, usecols = [0,1,2,3], names = ['CHR','SNP','CM','BP'])
+            sep=r'\s+', usecols = [0,1,2,3], names = ['CHR','SNP','CM','BP'])
     iter_bim = [['chr'+str(x1), x2 - 1, x2] for (x1, x2) in np.array(df_bim[['CHR', 'BP']])]
     bimbed = BedTool(iter_bim)
     annotbed = bimbed.intersect(bed_for_annot)

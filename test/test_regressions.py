@@ -1,59 +1,57 @@
-from __future__ import division
+
 import ldscore.regressions as reg
 import unittest
 import numpy as np
-import nose
+import pytest
 from numpy.testing import assert_array_equal, assert_array_almost_equal
-from nose.tools import assert_raises, assert_equal
 np.set_printoptions(precision=4)
 
 
-def test_update_separators():
-    ii1 = [True, True, False, True, True, False, True]
-    ii2 = [True, True, False, True, True, False, False]
-    ii3 = [False, True, False, True, True, False, False]
-    ii4 = [False, True, False, True, True, False, True]
-    ii5 = [True, True, True, True, True, True, True]
-    iis = map(np.array, [ii1, ii2, ii3, ii4, ii5])
-    ids = np.arange(len(ii1))
-    for ii in iis:
-        s = np.arange(np.sum(ii) + 1)
-        t = reg.update_separators(s, ii)
-        assert_equal(t[0], 0)
-        assert_equal(t[-1], len(ii))
-        assert_array_equal(ids[ii][(s[1:-2])], ids[(t[1:-2])])
+class Test_regressions_functions(unittest.TestCase):
 
+    def test_update_separators(self):
+        ii1 = [True, True, False, True, True, False, True]
+        ii2 = [True, True, False, True, True, False, False]
+        ii3 = [False, True, False, True, True, False, False]
+        ii4 = [False, True, False, True, True, False, True]
+        ii5 = [True, True, True, True, True, True, True]
+        iis = list(map(np.array, [ii1, ii2, ii3, ii4, ii5]))
+        ids = np.arange(len(ii1))
+        for ii in iis:
+            s = np.arange(np.sum(ii) + 1)
+            t = reg.update_separators(s, ii)
+            assert t[0] == 0
+            assert t[-1] == len(ii)
+            assert_array_equal(ids[ii][(s[1:-2])], ids[(t[1:-2])])
 
-def test_p_z_norm():
-    est = 10
-    se = 1
-    p, z = reg.p_z_norm(est, se)
-    assert z == 10
-    assert_array_almost_equal(p * 1e23, 1.523971)
-    se = 0
-    p, z = reg.p_z_norm(est, se)
-    assert p == 0
-    assert np.isinf(z)
+    def test_p_z_norm(self):
+        est = 10
+        se = 1
+        p, z = reg.p_z_norm(est, se)
+        assert z == 10
+        assert_array_almost_equal(p * 1e23, 1.523971)
+        se = 0
+        p, z = reg.p_z_norm(est, se)
+        assert p == 0
+        assert np.isinf(z)
 
+    def test_append_intercept(self):
+        x = np.ones((5, 2))
+        correct_x = np.ones((5, 3))
+        assert_array_equal(reg.append_intercept(x), correct_x)
 
-def test_append_intercept():
-    x = np.ones((5, 2))
-    correct_x = np.ones((5, 3))
-    assert_array_equal(reg.append_intercept(x), correct_x)
-
-
-def test_remove_brackets():
-    x = ' [] [] asdf [] '
-    nose.tools.assert_equal(reg.remove_brackets(x), 'asdf')
+    def test_remove_brackets(self):
+        x = ' [] [] asdf [] '
+        assert reg.remove_brackets(x) == 'asdf'
 
 
 class Test_h2_obs_to_liab(unittest.TestCase):
 
     def test_bad_data(self):
-        assert_raises(ValueError, reg.h2_obs_to_liab, 1, 1, 0.5)
-        assert_raises(ValueError, reg.h2_obs_to_liab, 1, 0.5, 1)
-        assert_raises(ValueError, reg.h2_obs_to_liab, 1, 0, 0.5)
-        assert_raises(ValueError, reg.h2_obs_to_liab, 1, 0.5, 0)
+        pytest.raises(ValueError, reg.h2_obs_to_liab, 1, 1, 0.5)
+        pytest.raises(ValueError, reg.h2_obs_to_liab, 1, 0.5, 1)
+        pytest.raises(ValueError, reg.h2_obs_to_liab, 1, 0, 0.5)
+        pytest.raises(ValueError, reg.h2_obs_to_liab, 1, 0.5, 0)
 
     def test_approx_scz(self):
         # conversion for a balanced study of a 1% phenotype is about 1/2
@@ -82,7 +80,7 @@ class Test_Hsq_1D(unittest.TestCase):
         self.ld = np.ones((4, 1))
         self.w_ld = np.ones((4, 1))
         self.N = 9 * np.ones((4, 1))
-        self.M = np.matrix((7))
+        self.M = np.array([[7]])
         self.hsq = reg.Hsq(
             self.chisq, self.ld, self.w_ld, self.N, self.M, n_blocks=3, intercept=1)
 
@@ -144,8 +142,8 @@ class Test_Coef(unittest.TestCase):
         self.hsq_noint = reg.Hsq(
             chisq, ld, w_ld, N, self.M, n_blocks=3, intercept=1)
         self.hsq_int = reg.Hsq(chisq, ld, w_ld, N, self.M, n_blocks=3)
-        print self.hsq_noint.summary()
-        print self.hsq_int.summary()
+        print(self.hsq_noint.summary())
+        print(self.hsq_int.summary())
 
     def test_coef(self):
         a = [self.hsq1 / self.M[0, 0], self.hsq2 / self.M[0, 1]]
@@ -187,7 +185,7 @@ class Test_Hsq_2D(unittest.TestCase):
             [np.ones((17, 1)), np.arange(17).reshape((17, 1))]).reshape((17, 2))
         self.w_ld = np.ones((17, 1))
         self.N = 9 * np.ones((17, 1))
-        self.M = np.matrix((7, 2))
+        self.M = np.array([[7, 2]])
         self.hsq = reg.Hsq(
             self.chisq, self.ld, self.w_ld, self.N, self.M, n_blocks=3, intercept=1)
 
@@ -214,7 +212,7 @@ class Test_Gencov_1D(unittest.TestCase):
         self.w_ld = np.ones((4, 1))
         self.N1 = 9 * np.ones((4, 1))
         self.N2 = 7 * np.ones((4, 1))
-        self.M = np.matrix((7))
+        self.M = np.array([[7]])
         self.hsq1 = 0.5
         self.hsq2 = 0.6
         self.gencov = reg.Gencov(self.z1, self.z2, self.ld, self.w_ld, self.N1, self.N2,
@@ -265,7 +263,7 @@ class Test_Gencov_2D(unittest.TestCase):
         self.w_ld = np.random.normal(size=50).reshape((50, 1))
         self.N1 = 9 * np.ones((50, 1))
         self.N2 = 7 * np.ones((50, 1))
-        self.M = np.matrix((700, 222))
+        self.M = np.array([[700, 222]])
         self.hsq1 = 0.5
         self.hsq2 = 0.6
         self.gencov = reg.Gencov(self.z1, self.z2, self.ld, self.w_ld, self.N1, self.N2,
@@ -289,9 +287,9 @@ class Test_Gencov_2D(unittest.TestCase):
                             self.M, 0, 0, 0, 0, n_blocks=3, intercept_gencov=1)
         hsq = reg.Hsq(np.square(self.z1), self.ld, self.w_ld,
                       self.N1, self.M, n_blocks=3, intercept=1)
-        print gencov.summary(['asdf', 'asdf'])
-        print
-        print hsq.summary(['asdf', 'asdf'])
+        print(gencov.summary(['asdf', 'asdf']))
+        print()
+        print(hsq.summary(['asdf', 'asdf']))
         assert_array_almost_equal(gencov.tot, hsq.tot)
         assert_array_almost_equal(gencov.tot_se, hsq.tot_se)
         assert_array_almost_equal(gencov.tot_cov, hsq.tot_cov)
@@ -305,7 +303,7 @@ class Test_RG_2D(unittest.TestCase):
         self.w_ld = np.random.normal(size=50).reshape((50, 1))
         self.N1 = 9 * np.ones((50, 1))
         self.N2 = 7 * np.ones((50, 1))
-        self.M = np.matrix((700, 222))
+        self.M = np.array([[700, 222]])
         self.hsq1 = 0.5
         self.hsq2 = 0.6
         self.rg = reg.RG(self.z1, -self.z1, self.ld, self.w_ld, self.N1, self.N1,
@@ -313,8 +311,8 @@ class Test_RG_2D(unittest.TestCase):
 
     def test_summary(self):
         # just make sure it doesn't encounter any errors at runtime
-        print self.rg.summary()
-        print self.rg.summary(silly=True)
+        print(self.rg.summary())
+        print(self.rg.summary(silly=True))
 
     def test_rg(self):
         # won't be exactly 1 because the h2 values passed to Gencov aren't 0
@@ -328,13 +326,13 @@ class Test_RG_Bad(unittest.TestCase):
         z1 = (1 / np.sum(ld, axis=1) * 10).reshape((50, 1))
         w_ld = np.ones((50, 1))
         N1 = 9 * np.ones((50, 1))
-        M = np.matrix((-700))
+        M = np.array([[-700]])
         rg = reg.RG(z1, -z1, ld, w_ld, N1, N1,
                     M, 1.0, 1.0, 0, n_blocks=20)
         assert rg._negative_hsq
         # check no runtime errors when _negative_hsq is True
-        print rg.summary()
-        print rg.summary(silly=True)
+        print(rg.summary())
+        print(rg.summary(silly=True))
         assert rg.rg_ratio == 'NA'
         assert rg.rg_se == 'NA'
         assert rg.rg == 'NA'

@@ -5,7 +5,7 @@ This module contains functions for parsing various ldsc-defined file formats.
 
 '''
 
-from __future__ import division
+
 import numpy as np
 import pandas as pd
 import os
@@ -18,7 +18,7 @@ def series_eq(x, y):
 
 
 def read_csv(fh, **kwargs):
-    return pd.read_csv(fh, delim_whitespace=True, na_values='.', **kwargs)
+    return pd.read_csv(fh, sep=r'\s+', na_values='.', **kwargs)
 
 
 def sub_chr(s, chrom):
@@ -32,7 +32,7 @@ def sub_chr(s, chrom):
 def get_present_chrs(fh, num):
     '''Checks which chromosomes exist, assuming that the file base will be appended by a dot in any suffix.'''
     chrs = []
-    for chrom in xrange(1,num):
+    for chrom in range(1,num):
         if glob.glob(sub_chr(fh, chrom) + '.*'):
             chrs.append(chrom)
     return chrs
@@ -211,7 +211,7 @@ def annot(fh_list, num=None, frqfile=None):
                 df_annot_chr_list = [annot_parser(sub_chr(fh, chrom) + annot_suffix[i], annot_compression[i])
                                      for i, fh in enumerate(fh_list)]
 
-            annot_matrix_chr_list = [np.matrix(df_annot_chr) for df_annot_chr in df_annot_chr_list]
+            annot_matrix_chr_list = [np.array(df_annot_chr) for df_annot_chr in df_annot_chr_list]
             annot_matrix_chr = np.hstack(annot_matrix_chr_list)
             y.append(np.dot(annot_matrix_chr.T, annot_matrix_chr))
             M_tot += len(df_annot_chr_list[0])
@@ -235,7 +235,7 @@ def annot(fh_list, num=None, frqfile=None):
             df_annot_list = [annot_parser(fh + annot_suffix[i], annot_compression[i])
                              for i, fh in enumerate(fh_list)]
 
-        annot_matrix_list = [np.matrix(y) for y in df_annot_list]
+        annot_matrix_list = [np.array(y) for y in df_annot_list]
         annot_matrix = np.hstack(annot_matrix_list)
         x = np.dot(annot_matrix.T, annot_matrix)
         M_tot = len(df_annot_list[0])
@@ -263,7 +263,7 @@ def __ID_List_Factory__(colnames, keepcol, fname_end, header=None, usecols=None)
 
             comp = get_compression(fname)
             self.df = pd.read_csv(fname, header=self.__header__, usecols=self.__usecols__,
-                                  delim_whitespace=True, compression=comp)
+                                  sep=r'\s+', compression=comp)
 
             if self.__colnames__:
                 self.df.columns = self.__colnames__

@@ -16,7 +16,7 @@ git clone https://github.com/bulik/ldsc.git
 cd ldsc
 ```
 
-In order to install the Python dependencies, you will need the [Anaconda](https://store.continuum.io/cshop/anaconda/) Python distribution and package manager. After installing Anaconda, run the following commands to create an environment with LDSC's dependencies:
+In order to install the Python dependencies, you will need the [Anaconda](https://store.continuum.io/cshop/anaconda/) Python distribution and package manager (Python 3.11 or newer). After installing Anaconda, run the following commands to create an environment with LDSC's dependencies:
 
 ```
 conda env create --file environment.yml
@@ -31,7 +31,14 @@ Once the above has completed, you can run:
 ```
 to print a list of all command-line options. If these commands fail with an error, then something as gone wrong during the installation process. 
 
-Short tutorials describing the four basic functions of `ldsc` (estimating LD Scores, h2 and partitioned h2, genetic correlation, the LD Score regression intercept) can be found in the wiki. If you would like to run the tests, please see the wiki.
+To verify the installation, run the test suite (167 tests):
+
+```
+python -m unittest discover -s test -p 'test_*.py'
+# or: pytest test/
+```
+
+Short tutorials describing the four basic functions of `ldsc` (estimating LD Scores, h2 and partitioned h2, genetic correlation, the LD Score regression intercept) can be found in the wiki.
 
 ## Updating LDSC
 

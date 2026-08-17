@@ -1,0 +1,77 @@
+CLR-class               CLR Class
+DIVW-class              DIVW Class
+Egger-class             Egger Class
+IVW-class               IVW Class
+MRAll-class             MRAll Class
+MRConMix-class          MRConMix Class
+MRHetPen-class          MRHetPen Class
+MRInput-class           MRInput Class
+MRLasso-class           MRLasso class
+MRMBE-class             MRMBE Class
+MRMVInput-class         MRMVInput Class
+MRcML-class             MRcML Class
+MVEgger-class           MVEgger Class
+MVGMM-class             MVGMM Class
+MVIVW-class             MVIVW Class
+MVIVWME-class           MVIVWME Class
+MVLasso-class           MRMVLasso class
+MVMRcML-class           MVMRcML Class
+MVMedian-class          MRMVMedian class
+MVPCGMM-class           MVPCGMM Class
+MVcML_SdTheta           Standard error estimate for MVMR-cML-BIC
+MVmr_cML                MVMRcML method with Data Perturbation
+MVmr_cML_DP             MVMRcML method with Data Perturbation
+MaxLik-class            MaxLik Class
+PCGMM-class             PCGMM Class
+PIVW-class              PIVW Class
+WeightedMedian-class    WeightedMedian Class
+cML_SdTheta             Standard Error of Estimated Theta
+cML_estimate            Estimate with Regular Likelihood
+cML_estimate_random     Estimate with Regular Likelihood Using Multiple
+                        Random Start Points
+calcium                 Data on effect of calcium on fasting glucose
+                        (correlated variants)
+invcov_mvmr             Generate the list of inverse of covariance
+                        matrices used in 'MVMR-cML-DP'
+ldlc                    Data on lipid effects on coronary artery
+                        disease (uncorrelated variants)
+mr_allmethods           Mendelian randomization estimation using all
+                        methods
+mr_cML                  Constrained maximum likelihood (cML) method
+mr_clr                  Conditional likelihood ratio (CLR) method
+mr_conmix               Contamination mixture method
+mr_divw                 Debiased inverse-variance weighted method
+mr_egger                MR-Egger method
+mr_forest               Draw a forest plot of causal estimates
+mr_funnel               Draw a funnel plot of variant-specific
+                        estimates
+mr_hetpen               Heterogeneity-penalized method
+mr_input                Inputting and formatting data for use in causal
+                        estimation
+mr_ivw                  Inverse-variance weighted method
+mr_lasso                MR-Lasso method
+mr_loo                  Leave-one-out estimates
+mr_maxlik               Maximum-likelihood method
+mr_mbe                  Mode-based method of Hartwig
+mr_median               Median-based method
+mr_mvcML                Multivariable constrained maximum likelihood
+                        method
+mr_mvegger              Multivariable MR-Egger method
+mr_mvgmm                Multivariable generalized method of moments
+                        (GMM) method
+mr_mvinput              Inputting and formatting data for use in causal
+                        estimation
+mr_mvivw                Multivariable inverse-variance weighted method
+mr_mvivwme              Multivariable inverse-variance weighted method
+                        with measurement error
+mr_mvlasso              Multivariable MR-Lasso method
+mr_mvmedian             Multivariable median-based method
+mr_mvpcgmm              Multivariable principal components generalized
+                        method of moments (PC-GMM) method
+mr_pcgmm                Univariable principal components generalized
+                        method of moments (PC-GMM) method
+mr_pivw                 Penalized inverse-variance weighted method
+mr_plot                 Draw a scatter plot of the genetic associations
+                        and/or causal estimates
+pheno_input             Extract summarized data from PhenoScanner
+phenoscanner            PhenoScanner

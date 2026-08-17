@@ -1,0 +1,74 @@
+MendelianRandomization v0.10.0
+==============================
+Removed extract.pheno.csv command and PhenoScanner example data.
+Added conditional likelihood ratio method and other weak instrument robust identification tests (mr_clr) - thanks to Sheng Wang for coding!
+Changed default threshold for PCs in mr_pcgmm and mr_mvpcgmm from 0.999 to 0.99.
+Added multivariable IVW with measurement error method (mr_mvivwme) - thanks to Andrew Grant and Ville Karhunen for coding!
+
+MendelianRandomization v0.9.0
+=============================
+Added multivariable generalized method of moments (GMM) method (mr_mvgmm) - thanks to Ashish Patel for coding!
+Added principal component genalized method of moments (PC-GMM) methods: mr_pcgmm for univariable and mr_mvpcgmm for multivariable - thanks to Ashish Patel for coding!
+Also added estimation of F statistics and conditional F statistics to the mr_ivw and mr_mvivw functions - thanks again to Ashish Patel for coding!
+
+MendelianRandomization v0.8.0
+=============================
+Added multivariable constrained maximum likelihood method (mr_mvcML) - thanks to Zhaotong Lin for coding!
+Added penalized IVW method (mr_pivw) - thanks to Siqi Xu for coding!
+
+MendelianRandomization v0.7.0
+=============================
+Added constrained maximum likelihood method (mr_cML) - thanks to Haoran Xue for coding!
+
+MendelianRandomization v0.6.0
+=============================
+Added debiased IVW method (mr_divw) - thanks to Ting Ye for coding!
+
+MendelianRandomization v0.5.0
+=============================
+Added multivariable median-based method (mr_mvmedian)
+Added MR-Lasso method (mr_lasso)
+Added multivariable MR-Lasso method (mr_mvlasso)
+Added robust option to multivariable IVW method (mr_mvivw)
+Added forest plot function (mr_forest)
+Added leave-one-out function (mr_loo)
+Added funnel plot function (mr_funnel)
+Added functionality for the mr_plot function to be applied to a MRMVInput object
+
+MendelianRandomization v0.4.3
+=============================
+Updated Phenoscanner function in case of web failure
+
+MendelianRandomization v0.4.1 and v0.4.2
+=============================
+Bug fixes
+
+MendelianRandomization v0.4.0
+=============================
+Added multivariable MR-Egger method (mr_mvegger)
+Added contamination mixture method (mr_conmix)
+Added seamless integration with PhenoScanner via the pheno_input function
+
+MendelianRandomization v0.3.0
+=============================
+Added mr_mvinput and mr_mvivw for multivariable Mendelian randomization
+Added mode-based estimation method of Hartwig et al (mr_mbe) and heterogeneity-penalized mode-based method (mr_hetpen)
+
+MendelianRandomization v0.2.2
+=============================
+Penalization of weights altered to correspond to Rees et al 2017 (submitted): penalization is now about the median estimate, only variants with heterogeneity p-value less than 0.01 are penalized.
+
+MendelianRandomization v0.2.1
+=============================
+Minor fix on extract.pheno.csv function that was making SNPs out of order.
+Minor fix on p-values from mr_ivw and mr_egger functions.
+
+MendelianRandomization v0.2.0
+=============================
+New functionality on mr_plot command: static graph (new options "interactive" and "labels").
+New command mr_maxlik: implements maximum-likelihood estimation method.
+Bug fixes on mr_allmethods command.
+
+MendelianRandomization v0.1.0
+=============================
+First release.
